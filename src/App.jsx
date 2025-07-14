@@ -1,34 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import  notif  from './notifications';
+import { useState } from 'react';
+import './App.css';
+
+
+const NotificationsApp = ({ notifications, setNotification, children }) => {
+  return (
+    <div className="notif-container">
+      {children}
+      <button className="remove-all-btn"
+      onClick={() => {
+        const updatedAllNotifs =  [];
+        setNotification(updatedAllNotifs);
+      }}
+      >Remove All</button>
+      <ul className="notifs">
+        {notifications.map((notification) => (
+          <li className="notif" key={notification.id}>
+            <p className="notif-name">{notification.name}</p>
+            <p className="notif-message">{notification.message}</p>
+            <button
+              className="remove-btn"
+              onClick={() => {
+                const updatedNotifs = notifications.filter(
+                  (n) => n.id !== notification.id
+                );
+                setNotification(updatedNotifs);
+              }}
+            >
+              Remove
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [notifications, setNotification] = useState(notif);
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+  const numberOfNotif = notifications.filter(notification => notification.id).length;
+
+return (
+  <>
+  <NotificationsApp notifications={notifications} setNotification={setNotification}>
+  <h1>Notification</h1>
+  <h3>You have: {numberOfNotif} Notifications</h3>
+  
+  </NotificationsApp>
+  </>
+)
 }
 
 export default App
